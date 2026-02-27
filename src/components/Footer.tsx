@@ -5,6 +5,7 @@ import { profile } from "@/data/profile";
 
 const footerLinks = [
   { label: "About", href: "#about" },
+  { label: "Roles", href: "#roles" },
   { label: "Skills", href: "#skills" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
@@ -40,6 +41,15 @@ export default function Footer() {
             <p className="mt-2 text-sm text-muted-foreground max-w-xs leading-relaxed">
               {profile.role} based in {profile.location.split(",")[0]}. Passionate about building AI-driven solutions and practical data systems.
             </p>
+
+            {/* Available for work status */}
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-green-500/10 border border-green-500/20 px-3 py-1.5 text-xs font-semibold text-green-600 dark:text-green-400">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+              </span>
+              Open to DS, ML Engineer &amp; Analyst roles
+            </div>
 
             {/* Social icons */}
             <div className="flex items-center gap-2 mt-5">

@@ -11,6 +11,20 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/bheemesha-k-m-471ba9252",
   resumePath: "/resume",
 
+  /** Roles the user is targeting — shown in hero typewriter and opportunity badges */
+  targetRoles: [
+    "Junior Data Scientist",
+    "Data Scientist",
+    "AI / Machine Learning Engineer",
+    "Data Analyst",
+    "Data Engineer",
+    "ML / DL Engineer",
+    "Computer Vision Engineer",
+    "AI Solutions Developer",
+    "Business Intelligence Analyst",
+    "NLP Engineer",
+  ],
+
   hero: {
     headline: "Hi, I'm Bheemesha 👋",
     subtitle:
@@ -26,7 +40,7 @@ export const profile = {
       { label: "Location", value: "Bengaluru, India" },
       { label: "Degree", value: "B.E. in CSE (CGPA 9.03)" },
       { label: "Focus", value: "ML / DL / Computer Vision" },
-      { label: "Status", value: "Open to opportunities" },
+      { label: "Status", value: "Open to DS, ML & Analyst roles" },
     ],
   },
 
@@ -199,9 +213,9 @@ export const profile = {
   },
 
   seo: {
-    title: "Bheemesha K M — Apprentice Data Scientist",
+    title: "Bheemesha K M — Data Scientist | ML Engineer | AI Developer",
     description:
-      "Portfolio of Bheemesha K M — Apprentice Data Scientist with experience in ML/DL, EDA, computer vision, and building data-driven systems.",
+      "Portfolio of Bheemesha K M — Apprentice Data Scientist seeking Junior Data Scientist, Data Analyst, ML Engineer, Data Engineer, and AI roles. Experienced in ML/DL, EDA, computer vision, and building data-driven systems.",
     url: "https://bheemesha.vercel.app",
     ogImage: "/og-image.png",
   },

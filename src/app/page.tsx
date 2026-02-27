@@ -22,6 +22,7 @@ import {
   Zap,
   Sparkles,
   TrendingUp,
+  Crosshair,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -81,12 +82,42 @@ export default function HomePage() {
         </div>
       </SectionWrapper>
 
+      {/* ── Roles I'm Targeting ────────────────────────────────── */}
+      <SectionWrapper
+        id="roles"
+        title="Roles I'm Targeting"
+        subtitle="Positions I'm actively seeking and well-prepared for"
+        className="bg-muted/30"
+      >
+        <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+          {profile.targetRoles.map((role, i) => (
+            <div
+              key={role}
+              className="group relative flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition-all duration-500 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-1 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-gradient-from/0 to-gradient-to/0 group-hover:from-gradient-from/5 group-hover:to-gradient-to/5 transition-all duration-500" />
+              <div className="relative flex items-center gap-3 w-full">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-gradient-from to-gradient-to text-[11px] font-bold text-white">
+                  {String(i + 1).padStart(2, "0")}
+                </div>
+                <span className="text-sm font-semibold text-card-foreground leading-tight">
+                  {role}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-8 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
+          <Crosshair className="h-4 w-4 text-primary" />
+          Ready to contribute from Day 1 — strong foundation in Python, ML/DL, EDA &amp; AI systems
+        </p>
+      </SectionWrapper>
+
       {/* ── Skills ────────────────────────────────────────────── */}
       <SectionWrapper
         id="skills"
         title="Skills & Technologies"
         subtitle="Tools and technologies I work with every day"
-        className="relative bg-muted/30"
       >
         <SkillChips groups={profile.skills} />
       </SectionWrapper>

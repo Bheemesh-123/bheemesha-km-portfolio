@@ -90,6 +90,20 @@ export default function ResumePage() {
               ))}
             </Section>
 
+            {/* Target Roles */}
+            <Section icon={Briefcase} title="Roles I'm Targeting">
+              <div className="flex flex-wrap gap-2">
+                {profile.targetRoles.map((role) => (
+                  <span
+                    key={role}
+                    className="rounded-full bg-gradient-to-r from-gradient-from/10 to-gradient-to/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary"
+                  >
+                    {role}
+                  </span>
+                ))}
+              </div>
+            </Section>
+
             {/* Experience */}
             <Section icon={Briefcase} title="Experience">
               {profile.experience.map((exp, idx) => (

@@ -72,11 +72,16 @@ function FloatingParticles() {
 export default function Hero() {
   const roles = [
     "Apprentice Data Scientist",
+    "Junior Data Scientist",
+    "Data Scientist",
+    "AI / Machine Learning Engineer",
+    "Data Analyst",
+    "Data Engineer",
     "ML / DL Enthusiast",
     "Computer Vision Explorer",
     "AI Solutions Builder",
   ];
-  const typed = useTypewriter(roles, 60, 2200);
+  const typed = useTypewriter(roles, 55, 1800);
   const lines = profile.hero.subtitle.split("\n");
 
   const fadeUp = (delay: number) => ({
@@ -126,7 +131,7 @@ export default function Hero() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
           </span>
-          Available for opportunities
+          Open to Data Scientist, ML Engineer &amp; Analyst roles
         </motion.div>
 
         {/* Headline */}

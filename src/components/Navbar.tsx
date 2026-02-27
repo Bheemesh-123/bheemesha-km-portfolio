@@ -10,12 +10,12 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "About", href: "#about" },
+  { label: "Roles", href: "#roles" },
   { label: "Skills", href: "#skills" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
   { label: "Education", href: "#education" },
   { label: "Certifications", href: "#certifications" },
-  { label: "Extras", href: "#extras" },
   { label: "Contact", href: "#contact" },
 ];
 
