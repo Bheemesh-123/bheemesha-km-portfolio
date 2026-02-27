@@ -53,6 +53,8 @@ export default function ContactForm() {
     return Object.keys(e).length === 0;
   };
 
+  const [noKeyWarning, setNoKeyWarning] = useState(false);
+
   /* Opens the user's mail client as a fallback */
   const mailtoFallback = () => {
     const subject = encodeURIComponent(
@@ -73,9 +75,9 @@ export default function ContactForm() {
 
     const accessKey = profile.web3formsKey;
 
-    /* If no Web3Forms key configured, go straight to mailto */
+    /* If no Web3Forms key configured, show friendly message instead of triggering mailto */
     if (!accessKey) {
-      mailtoFallback();
+      setNoKeyWarning(true);
       setSending(false);
       return;
     }
@@ -143,22 +145,7 @@ export default function ContactForm() {
                 Message Sent!
               </h3>
               <p className="mt-3 text-sm text-muted-foreground max-w-sm leading-relaxed">
-                {profile.web3formsKey
-                  ? "Thank you! Your message has been delivered to my inbox. I'll get back to you within 24 hours."
-                  : (
-                    <>
-                      Your email client should have opened. If not, feel free to email me
-                      directly at{" "}
-                      <a
-                        href={`mailto:${profile.email}`}
-                        className="text-primary font-medium hover:underline"
-                      >
-                        {profile.email}
-                      </a>
-                      .
-                    </>
-                  )
-                }
+                Thank you! Your message has been delivered to my inbox. I&apos;ll get back to you within 24 hours.
               </p>
               <button
                 onClick={() => {
@@ -169,6 +156,56 @@ export default function ContactForm() {
               >
                 Send another message
                 <ArrowRight className="h-4 w-4" />
+              </button>
+            </motion.div>
+          ) : noKeyWarning ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+              className="flex flex-col items-center justify-center py-10 text-center"
+            >
+              <div className="relative mb-6">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 border border-primary/20">
+                  <Mail className="h-10 w-10 text-primary" />
+                </div>
+              </div>
+              <h3 className="text-2xl font-bold text-card-foreground">
+                Let&apos;s Connect!
+              </h3>
+              <p className="mt-3 text-sm text-muted-foreground max-w-sm leading-relaxed">
+                The best way to reach me is via email. Click below to send me a message directly!
+              </p>
+              <a
+                href={`mailto:${profile.email}?subject=${encodeURIComponent(`Portfolio Contact from ${formData.name}`)}&body=${encodeURIComponent(`Hi Bheemesha,\n\n${formData.message}\n\nFrom: ${formData.name}\nEmail: ${formData.email}`)}`}
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-gradient-from to-gradient-to px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <Mail className="h-4 w-4" />
+                Open Email to {profile.email}
+              </a>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href={profile.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground hover:border-primary/30 hover:text-primary transition-all"
+                >
+                  <Linkedin className="h-3.5 w-3.5" />
+                  Message on LinkedIn
+                </a>
+                <a
+                  href={`tel:${profile.phone}`}
+                  className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground hover:border-primary/30 hover:text-primary transition-all"
+                >
+                  <Phone className="h-3.5 w-3.5" />
+                  Call {profile.phone}
+                </a>
+              </div>
+              <button
+                onClick={() => setNoKeyWarning(false)}
+                className="mt-6 text-xs text-muted-foreground hover:text-foreground transition-colors underline"
+              >
+                ← Back to form
               </button>
             </motion.div>
           ) : (
