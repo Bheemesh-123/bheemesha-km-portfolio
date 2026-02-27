@@ -17,7 +17,7 @@ export const profile = {
    * Messages will be delivered directly to your email inbox in real-time.
    * Leave empty string to fall back to mailto: links.
    */
-  web3formsKey: "",
+  web3formsKey: "2e723059-fb71-4da6-b5fc-63c2a66cc644",
 
   /** Roles the user is targeting — shown in hero typewriter and opportunity badges */
   targetRoles: [
