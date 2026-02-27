@@ -54,20 +54,6 @@ export default function ContactForm() {
     return Object.keys(e).length === 0;
   };
 
-  const [noKeyWarning, setNoKeyWarning] = useState(false);
-
-  /* Opens the user's mail client as a fallback */
-  const mailtoFallback = () => {
-    const subject = encodeURIComponent(
-      `Portfolio Contact from ${formData.name}`
-    );
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
-    );
-    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
-    setSubmitted(true);
-  };
-
   const handleSubmit = async (ev: FormEvent) => {
     ev.preventDefault();
     if (!validate()) return;
@@ -75,22 +61,13 @@ export default function ContactForm() {
     setSending(true);
     setSubmitError(null);
 
-    const accessKey = profile.web3formsKey;
-
-    /* If no Web3Forms key configured, show friendly message instead of triggering mailto */
-    if (!accessKey) {
-      setNoKeyWarning(true);
-      setSending(false);
-      return;
-    }
-
-    /* Submit directly to Web3Forms (client-side, no API route needed) */
+    /* Submit directly to Web3Forms (client-side) */
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          access_key: accessKey,
+          access_key: profile.web3formsKey || "2e723059-fb71-4da6-b5fc-63c2a66cc644",
           name: formData.name,
           email: formData.email,
           message: formData.message,
@@ -162,56 +139,6 @@ export default function ContactForm() {
                 <ArrowRight className="h-4 w-4" />
               </button>
             </motion.div>
-          ) : noKeyWarning ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-              className="flex flex-col items-center justify-center py-10 text-center"
-            >
-              <div className="relative mb-6">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 border border-primary/20">
-                  <Mail className="h-10 w-10 text-primary" />
-                </div>
-              </div>
-              <h3 className="text-2xl font-bold text-card-foreground">
-                Let&apos;s Connect!
-              </h3>
-              <p className="mt-3 text-sm text-muted-foreground max-w-sm leading-relaxed">
-                The best way to reach me is via email. Click below to send me a message directly!
-              </p>
-              <a
-                href={`mailto:${profile.email}?subject=${encodeURIComponent(`Portfolio Contact from ${formData.name}`)}&body=${encodeURIComponent(`Hi Bheemesha,\n\n${formData.message}\n\nFrom: ${formData.name}\nEmail: ${formData.email}`)}`}
-                className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-gradient-from to-gradient-to px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <Mail className="h-4 w-4" />
-                Open Email to {profile.email}
-              </a>
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-                <a
-                  href={profile.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground hover:border-primary/30 hover:text-primary transition-all"
-                >
-                  <Linkedin className="h-3.5 w-3.5" />
-                  Message on LinkedIn
-                </a>
-                <a
-                  href={`tel:${profile.phone}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground hover:border-primary/30 hover:text-primary transition-all"
-                >
-                  <Phone className="h-3.5 w-3.5" />
-                  Call {profile.phone}
-                </a>
-              </div>
-              <button
-                onClick={() => setNoKeyWarning(false)}
-                className="mt-6 text-xs text-muted-foreground hover:text-foreground transition-colors underline"
-              >
-                ← Back to form
-              </button>
-            </motion.div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-6">
               {/* Form header */}
@@ -222,10 +149,7 @@ export default function ContactForm() {
                 <div>
                   <h3 className="text-sm font-bold text-card-foreground">Send me a message</h3>
                   <p className="text-xs text-muted-foreground">
-                    {profile.web3formsKey
-                      ? "Messages are delivered directly to my inbox"
-                      : "Opens your email client to send me a message"
-                    }
+                    Messages are delivered directly to my inbox
                   </p>
                 </div>
               </div>
