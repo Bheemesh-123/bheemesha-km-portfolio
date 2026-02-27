@@ -35,6 +35,7 @@ export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validate = (): boolean => {
     const e: FormErrors = {};
@@ -72,6 +73,7 @@ export default function ContactForm() {
     if (!validate()) return;
 
     setSending(true);
+    setSubmitError(null);
 
     const accessKey = profile.web3formsKey;
 
@@ -102,12 +104,14 @@ export default function ContactForm() {
         setSubmitted(true);
         setFormData({ name: "", email: "", message: "" });
       } else {
-        /* Web3Forms returned an error — fall back to mailto */
-        mailtoFallback();
+        setSubmitError(data.message || "Something went wrong. Please try again or email me directly.");
       }
-    } catch {
-      /* Network error — fall back to mailto */
-      mailtoFallback();
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error
+          ? `Network error: ${err.message}. Please check your connection or email me directly.`
+          : "Network error. Please try again or email me directly."
+      );
     } finally {
       setSending(false);
     }
@@ -323,6 +327,19 @@ export default function ContactForm() {
                   <p className="mt-1.5 text-xs text-red-500">{errors.message}</p>
                 )}
               </div>
+
+              {submitError && (
+                <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-600 dark:text-red-400">
+                  <p className="font-semibold">Failed to send message</p>
+                  <p className="mt-1 text-xs opacity-80">{submitError}</p>
+                  <a
+                    href={`mailto:${profile.email}`}
+                    className="mt-2 inline-block text-xs font-medium underline hover:no-underline"
+                  >
+                    Email me directly at {profile.email}
+                  </a>
+                </div>
+              )}
 
               <button
                 type="submit"
