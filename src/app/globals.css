@@ -16,6 +16,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-gradient-from: var(--gradient-from);
   --color-gradient-to: var(--gradient-to);
+  --color-gradient-accent: var(--gradient-accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -34,6 +35,7 @@
   --accent-foreground: #4338ca;
   --gradient-from: #6366f1;
   --gradient-to: #8b5cf6;
+  --gradient-accent: #ec4899;
 }
 
 .dark {
@@ -50,6 +52,7 @@
   --accent-foreground: #c7d2fe;
   --gradient-from: #818cf8;
   --gradient-to: #a78bfa;
+  --gradient-accent: #f472b6;
 }
 
 /* ── Base ─────────────────────────────────────────────────────── */
@@ -74,7 +77,14 @@ body {
   background-clip: text;
 }
 
-/* ── Glow utility ─────────────────────────────────────────────── */
+.text-gradient-accent {
+  background: linear-gradient(135deg, var(--gradient-from), var(--gradient-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glow utilities ───────────────────────────────────────────── */
 
 .glow {
   box-shadow: 0 0 30px -5px color-mix(in srgb, var(--primary) 30%, transparent);
@@ -84,12 +94,81 @@ body {
   box-shadow: 0 0 15px -3px color-mix(in srgb, var(--primary) 25%, transparent);
 }
 
+.glow-lg {
+  box-shadow:
+    0 0 40px -5px color-mix(in srgb, var(--primary) 35%, transparent),
+    0 0 80px -10px color-mix(in srgb, var(--gradient-to) 20%, transparent);
+}
+
 /* ── Glass card ───────────────────────────────────────────────── */
 
 .glass {
   background: color-mix(in srgb, var(--card) 70%, transparent);
-  backdrop-filter: blur(12px) saturate(1.4);
-  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+}
+
+/* ── Shimmer animation ────────────────────────────────────────── */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--primary) 10%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* ── Floating animation ───────────────────────────────────────── */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float 7s ease-in-out infinite;
+}
+
+.animate-float-delay {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* ── Gradient border card ─────────────────────────────────────── */
+
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gradient-border:hover::before {
+  opacity: 1;
 }
 
 /* ── Focus ring for keyboard nav ──────────────────────────────── */
@@ -134,6 +213,17 @@ body {
   background-size: 24px 24px;
 }
 
+/* ── Mesh gradient background ─────────────────────────────────── */
+
+.bg-mesh {
+  background-image:
+    radial-gradient(at 40% 20%, color-mix(in srgb, var(--gradient-from) 12%, transparent) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, color-mix(in srgb, var(--gradient-to) 10%, transparent) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, color-mix(in srgb, var(--gradient-accent) 8%, transparent) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, color-mix(in srgb, var(--gradient-from) 8%, transparent) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, color-mix(in srgb, var(--gradient-to) 10%, transparent) 0px, transparent 50%);
+}
+
 /* ── Noise texture overlay ────────────────────────────────────── */
 
 .noise::before {
@@ -143,4 +233,27 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 0;
+}
+
+/* ── Animated underline ───────────────────────────────────────── */
+
+.animated-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.animated-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gradient-from), var(--gradient-to));
+  border-radius: 1px;
+  transition: width 0.3s ease;
+}
+
+.animated-underline:hover::after {
+  width: 100%;
 }

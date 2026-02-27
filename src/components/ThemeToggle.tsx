@@ -25,29 +25,29 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative rounded-full p-2 bg-muted hover:bg-accent text-foreground transition-colors overflow-hidden h-9 w-9 flex items-center justify-center"
+      className="relative rounded-full p-2 bg-muted/80 hover:bg-accent text-foreground transition-all duration-300 overflow-hidden h-9 w-9 flex items-center justify-center border border-border hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5"
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
       <AnimatePresence mode="wait" initial={false}>
         {isDark ? (
           <motion.div
             key="sun"
-            initial={{ rotate: -90, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: 90, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            initial={{ rotate: -90, scale: 0, opacity: 0 }}
+            animate={{ rotate: 0, scale: 1, opacity: 1 }}
+            exit={{ rotate: 90, scale: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           >
-            <Sun className="h-4 w-4" />
+            <Sun className="h-4 w-4 text-amber-500" />
           </motion.div>
         ) : (
           <motion.div
             key="moon"
-            initial={{ rotate: 90, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: -90, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            initial={{ rotate: 90, scale: 0, opacity: 0 }}
+            animate={{ rotate: 0, scale: 1, opacity: 1 }}
+            exit={{ rotate: -90, scale: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           >
-            <Moon className="h-4 w-4" />
+            <Moon className="h-4 w-4 text-indigo-500" />
           </motion.div>
         )}
       </AnimatePresence>

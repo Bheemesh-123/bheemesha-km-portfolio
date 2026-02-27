@@ -81,11 +81,11 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="group relative text-lg font-bold text-foreground transition-colors"
+          className="group relative text-xl font-extrabold text-foreground transition-colors"
         >
           <span className="text-gradient">{profile.name.split(" ")[0]}</span>
           <span className="text-primary">.</span>
-          <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-gradient-from to-gradient-to transition-all duration-300 group-hover:w-full" />
+          <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-gradient-from to-gradient-to transition-all duration-300 group-hover:w-full rounded-full" />
         </Link>
 
         {/* Desktop links */}
