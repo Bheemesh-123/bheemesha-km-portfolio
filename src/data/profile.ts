@@ -11,6 +11,14 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/bheemesha-k-m-471ba9252",
   resumePath: "/resume",
 
+  /**
+   * Web3Forms public access key (safe for client-side use).
+   * Get yours free at https://web3forms.com — enter your email and you'll get the key.
+   * Messages will be delivered directly to your email inbox in real-time.
+   * Leave empty string to fall back to mailto: links.
+   */
+  web3formsKey: "",
+
   /** Roles the user is targeting — shown in hero typewriter and opportunity badges */
   targetRoles: [
     "Junior Data Scientist",

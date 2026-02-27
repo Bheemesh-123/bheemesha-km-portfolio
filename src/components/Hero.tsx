@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Download, Github, Linkedin, Sparkles, MapPin, Mail } from "lucide-react";
 import { profile } from "@/data/profile";
@@ -34,25 +34,36 @@ function useTypewriter(texts: string[], speed = 50, pause = 2000) {
   return display;
 }
 
-/* ── Floating particles ──────────────────────────────────────── */
+/* ── Seeded random to avoid hydration mismatch ───────────────── */
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
+/* ── Floating particles (deterministic) ──────────────────────── */
 function FloatingParticles() {
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 30 }).map((_, i) => ({
-        id: i,
-        x1: `${Math.random() * 100}%`,
-        y1: `${Math.random() * 100}%`,
-        x2: `${Math.random() * 100}%`,
-        y2: `${Math.random() * 100}%`,
-        x3: `${Math.random() * 100}%`,
-        y3: `${Math.random() * 100}%`,
-        scale: Math.random() * 0.5 + 0.5,
-        duration: Math.random() * 20 + 15,
-        size: Math.random() > 0.7 ? "h-1.5 w-1.5" : "h-1 w-1",
-        opacity: Math.random() > 0.5 ? "bg-primary/30" : "bg-gradient-accent/20",
-      })),
-    []
-  );
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  const particles = Array.from({ length: 20 }).map((_, i) => ({
+    id: i,
+    x1: `${seededRandom(i * 7 + 1) * 100}%`,
+    y1: `${seededRandom(i * 7 + 2) * 100}%`,
+    x2: `${seededRandom(i * 7 + 3) * 100}%`,
+    y2: `${seededRandom(i * 7 + 4) * 100}%`,
+    x3: `${seededRandom(i * 7 + 5) * 100}%`,
+    y3: `${seededRandom(i * 7 + 6) * 100}%`,
+    scale: seededRandom(i * 7 + 7) * 0.5 + 0.5,
+    duration: seededRandom(i * 13 + 1) * 20 + 15,
+    size: seededRandom(i * 13 + 2) > 0.7 ? "h-1.5 w-1.5" : "h-1 w-1",
+    opacity: seededRandom(i * 13 + 3) > 0.5 ? "bg-primary/30" : "bg-gradient-accent/20",
+  }));
+
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
       {particles.map((p) => (

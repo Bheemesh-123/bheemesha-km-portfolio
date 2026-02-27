@@ -61,10 +61,7 @@ export default function ContactForm() {
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
     );
-    window.open(
-      `mailto:${profile.email}?subject=${subject}&body=${body}`,
-      "_self"
-    );
+    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
     setSubmitted(true);
   };
 
@@ -73,22 +70,41 @@ export default function ContactForm() {
     if (!validate()) return;
 
     setSending(true);
+
+    const accessKey = profile.web3formsKey;
+
+    /* If no Web3Forms key configured, go straight to mailto */
+    if (!accessKey) {
+      mailtoFallback();
+      setSending(false);
+      return;
+    }
+
+    /* Submit directly to Web3Forms (client-side, no API route needed) */
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: accessKey,
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          from_name: "Portfolio Contact Form",
+          subject: `New message from ${formData.name} via Portfolio`,
+        }),
       });
       const data = await res.json();
 
-      if (data.ok) {
+      if (data.success) {
         setSubmitted(true);
-      } else if (data.error === "MAILTO_FALLBACK") {
-        mailtoFallback();
+        setFormData({ name: "", email: "", message: "" });
       } else {
+        /* Web3Forms returned an error — fall back to mailto */
         mailtoFallback();
       }
     } catch {
+      /* Network error — fall back to mailto */
       mailtoFallback();
     } finally {
       setSending(false);
@@ -127,15 +143,22 @@ export default function ContactForm() {
                 Message Sent!
               </h3>
               <p className="mt-3 text-sm text-muted-foreground max-w-sm leading-relaxed">
-                Your email client should have opened. If not, feel free to email me
-                directly at{" "}
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="text-primary font-medium hover:underline"
-                >
-                  {profile.email}
-                </a>
-                .
+                {profile.web3formsKey
+                  ? "Thank you! Your message has been delivered to my inbox. I'll get back to you within 24 hours."
+                  : (
+                    <>
+                      Your email client should have opened. If not, feel free to email me
+                      directly at{" "}
+                      <a
+                        href={`mailto:${profile.email}`}
+                        className="text-primary font-medium hover:underline"
+                      >
+                        {profile.email}
+                      </a>
+                      .
+                    </>
+                  )
+                }
               </p>
               <button
                 onClick={() => {
@@ -157,7 +180,12 @@ export default function ContactForm() {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-card-foreground">Send me a message</h3>
-                  <p className="text-xs text-muted-foreground">I&apos;ll get back to you within 24 hours</p>
+                  <p className="text-xs text-muted-foreground">
+                    {profile.web3formsKey
+                      ? "Messages are delivered directly to my inbox"
+                      : "Opens your email client to send me a message"
+                    }
+                  </p>
                 </div>
               </div>
 
