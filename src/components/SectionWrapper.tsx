@@ -67,7 +67,7 @@ export default function SectionWrapper({
               initial={{ scaleX: 0 }}
               animate={inView ? { scaleX: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-              className="mt-6 mx-auto h-1 w-24 rounded-full bg-gradient-to-r from-gradient-from via-gradient-to to-gradient-accent origin-center"
+              className="mt-6 mx-auto h-1 w-24 rounded-full bg-linear-to-r from-gradient-from via-gradient-to to-gradient-accent origin-center"
             />
           </div>
         )}

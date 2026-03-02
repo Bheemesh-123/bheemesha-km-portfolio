@@ -96,7 +96,7 @@ export default function ContactForm() {
       {/* Form */}
       <div className="lg:col-span-3 group/form relative rounded-2xl border border-border bg-card p-6 sm:p-8 transition-all duration-500 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20 overflow-hidden">
         {/* Background gradient on hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gradient-from/0 to-gradient-to/0 group-hover/form:from-gradient-from/[0.02] group-hover/form:to-gradient-to/[0.02] transition-all duration-500" />
+        <div className="absolute inset-0 bg-linear-to-br from-gradient-from/0 to-gradient-to/0 group-hover/form:from-gradient-from/2 group-hover/form:to-gradient-to/2 transition-all duration-500" />
 
         <div className="relative">
           {submitted ? (
@@ -114,7 +114,7 @@ export default function ContactForm() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.3, type: "spring" }}
-                  className="absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-gradient-from to-gradient-to"
+                  className="absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-linear-to-br from-gradient-from to-gradient-to"
                 >
                   <Sparkles className="h-3.5 w-3.5 text-white" />
                 </motion.div>
@@ -130,7 +130,7 @@ export default function ContactForm() {
                   setSubmitted(false);
                   setFormData({ name: "", email: "", message: "" });
                 }}
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-gradient-from to-gradient-to px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-gradient-from to-gradient-to px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 Send another message
                 <ArrowRight className="h-4 w-4" />
@@ -140,7 +140,7 @@ export default function ContactForm() {
             <form onSubmit={handleSubmit} noValidate className="space-y-6">
               {/* Form header */}
               <div className="flex items-center gap-3 mb-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-gradient-from/10 to-gradient-to/10 border border-primary/10">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-gradient-from/10 to-gradient-to/10 border border-primary/10">
                   <MessageSquare className="h-5 w-5 text-primary" />
                 </div>
                 <div>
@@ -265,7 +265,7 @@ export default function ContactForm() {
               <button
                 type="submit"
                 disabled={sending}
-                className="group inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-gradient-from to-gradient-to px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all w-full justify-center sm:w-auto hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="group inline-flex items-center gap-2.5 rounded-full bg-linear-to-r from-gradient-from to-gradient-to px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all w-full justify-center sm:w-auto hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {sending ? (
                   <>
@@ -356,9 +356,9 @@ function ContactCard({
       className="group relative flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition-all duration-500 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20 overflow-hidden"
     >
       {/* Hover gradient bg */}
-      <div className="absolute inset-0 bg-gradient-to-r from-gradient-from/0 to-gradient-to/0 group-hover:from-gradient-from/[0.03] group-hover:to-gradient-to/[0.03] transition-all duration-500" />
+      <div className="absolute inset-0 bg-linear-to-r from-gradient-from/0 to-gradient-to/0 group-hover:from-gradient-from/3 group-hover:to-gradient-to/3 transition-all duration-500" />
 
-      <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent group-hover:bg-gradient-to-br group-hover:from-gradient-from/20 group-hover:to-gradient-to/20 transition-all duration-300">
+      <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent group-hover:bg-linear-to-br group-hover:from-gradient-from/20 group-hover:to-gradient-to/20 transition-all duration-300">
         {icon}
       </div>
       <div className="relative min-w-0">
