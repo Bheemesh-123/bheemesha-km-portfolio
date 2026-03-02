@@ -61,27 +61,24 @@ export default function ContactForm() {
     setSending(true);
     setSubmitError(null);
 
-    /* Submit directly to Web3Forms (client-side) */
+    /* Submit via server-side SMTP API route */
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          access_key: profile.web3formsKey || "2e723059-fb71-4da6-b5fc-63c2a66cc644",
           name: formData.name,
           email: formData.email,
           message: formData.message,
-          from_name: "Portfolio Contact Form",
-          subject: `New message from ${formData.name} via Portfolio`,
         }),
       });
       const data = await res.json();
 
-      if (data.success) {
+      if (data.ok) {
         setSubmitted(true);
         setFormData({ name: "", email: "", message: "" });
       } else {
-        setSubmitError(data.message || "Something went wrong. Please try again or email me directly.");
+        setSubmitError(data.error || "Something went wrong. Please try again or email me directly.");
       }
     } catch (err) {
       setSubmitError(

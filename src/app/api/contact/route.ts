@@ -1,27 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 /**
- * Contact form API route.
- * Uses Web3Forms (https://web3forms.com) — a free, no-backend form service.
+ * Contact form API route — sends email via Gmail SMTP using Nodemailer.
  *
  * HOW TO SET UP:
- * 1. Go to https://web3forms.com
- * 2. Enter your email: bheemesh.k.m8497@gmail.com
- * 3. You'll receive an "access_key" via email
- * 4. Set it as the environment variable WEB3FORMS_KEY
- *    - Locally: add to .env.local  →  WEB3FORMS_KEY=your-key-here
- *    - On Vercel: Settings → Environment Variables → WEB3FORMS_KEY
- *
- * If WEB3FORMS_KEY is not set, the form falls back to mailto: on the client side.
+ * 1. Go to https://myaccount.google.com/security
+ * 2. Enable 2-Step Verification (required for App Passwords)
+ * 3. Go to https://myaccount.google.com/apppasswords
+ * 4. Create an App Password (select "Mail" and your device)
+ * 5. Copy the 16-character password (e.g. "abcd efgh ijkl mnop")
+ * 6. Set these environment variables:
+ *    - SMTP_EMAIL=your-gmail@gmail.com
+ *    - SMTP_PASSWORD=your-16-char-app-password
+ *    - Locally: add to .env.local
+ *    - On Vercel: Settings → Environment Variables
  */
-
-const WEB3FORMS_URL = "https://api.web3forms.com/submit";
 
 export async function POST(req: NextRequest) {
   try {
     const { name, email, message } = await req.json();
 
-    // Validate
+    // ── Validate ──────────────────────────────────────────────
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
       return NextResponse.json(
         { ok: false, error: "All fields are required." },
@@ -41,41 +41,52 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const accessKey = process.env.WEB3FORMS_KEY;
+    // ── Check env vars ────────────────────────────────────────
+    const smtpEmail = process.env.SMTP_EMAIL;
+    const smtpPassword = process.env.SMTP_PASSWORD;
 
-    if (!accessKey) {
-      // Fallback: no API key configured, tell client to use mailto
+    if (!smtpEmail || !smtpPassword) {
+      console.error("SMTP_EMAIL or SMTP_PASSWORD not set in environment variables.");
       return NextResponse.json(
-        { ok: false, error: "MAILTO_FALLBACK" },
-        { status: 200 }
-      );
-    }
-
-    // Submit to Web3Forms
-    const response = await fetch(WEB3FORMS_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        access_key: accessKey,
-        name,
-        email,
-        message,
-        from_name: "Portfolio Contact Form",
-        subject: `Portfolio Contact from ${name}`,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      return NextResponse.json({ ok: true });
-    } else {
-      console.error("Web3Forms error:", data);
-      return NextResponse.json(
-        { ok: false, error: "Failed to send message. Please try again." },
+        { ok: false, error: "Email service is not configured. Please contact me directly." },
         { status: 500 }
       );
     }
+
+    // ── Create SMTP transporter (Gmail) ───────────────────────
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: smtpEmail,
+        pass: smtpPassword,
+      },
+    });
+
+    // ── Send the email ────────────────────────────────────────
+    await transporter.sendMail({
+      from: `"Portfolio Contact Form" <${smtpEmail}>`,
+      to: smtpEmail, // you receive the message
+      replyTo: `"${name}" <${email}>`, // reply goes to the sender
+      subject: `New Portfolio Message from ${name}`,
+      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #6366f1;">New Message from Portfolio</h2>
+          <hr style="border: 1px solid #e5e7eb;" />
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+          <hr style="border: 1px solid #e5e7eb;" />
+          <h3>Message:</h3>
+          <p style="white-space: pre-wrap; background: #f9fafb; padding: 16px; border-radius: 8px;">${message}</p>
+          <hr style="border: 1px solid #e5e7eb;" />
+          <p style="font-size: 12px; color: #9ca3af;">
+            Sent from your portfolio contact form. Reply directly to this email to respond to ${name}.
+          </p>
+        </div>
+      `,
+    });
+
+    return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Contact API error:", err);
     return NextResponse.json(
